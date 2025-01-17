@@ -1,0 +1,43 @@
+name: docker-compose-actions-workflow
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: "Install UV"
+        shell: bash
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          
+      - name: linting
+        run: uvx ruff check . --fix --unsafe-fixes
+        
+      - name: format
+        run: uvx ruff format .
+
+      - name: Set up Docker Compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+      - name: Build the stack
+        run: docker-compose build
+
+      - name: Check the docker images
+        run: docker images
+      
+      - name: Install Trivy
+        run: cd /usr/local/bin && curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.16.0
+
+      - name: Scan Image
+        run: trivy image labeler-backend_web:latest
+        
+      - name: Build the stack
+        run: docker-compose up -d
+
+      - name: Test
+        run: docker ps -a
+
+      - name: Stop container
+        run: docker-compose down

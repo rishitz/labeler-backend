@@ -1,0 +1,188 @@
+# name: Build and Push image
+
+# on:
+#   workflow_call:
+#     inputs:
+#       service:
+#         required: false
+#         type: string
+#         description: 'Service name'
+#       env-vars:
+#         required: false
+#         type: string
+#         description: 'extra environment varaiables'
+#       cr-vars:
+#         required: false
+#         type: string
+#         description: 'extra environment varaiables'
+#       region:
+#         required: false
+#         type: string
+#         description: 'repository region'
+#       project_id:
+#         required: false
+#         type: string
+#         description: 'GKE Cluster project id'
+#       service-name:
+#         required: true
+#         type: string
+#         description: 'Cloud Run service name'
+#       docker_img_name:
+#         required: true
+#         type: string
+#         description: 'Docker image name which you using for deployment'
+#       cpu:
+#         required: false
+#         default: 1
+#         type: string
+#         description: 'CPU size to allocate to instances'
+#       memory:
+#         required: false
+#         default: 1Gi
+#         type: string
+#         description: 'CPU size to allocate to instances'
+#       service_account:
+#         required: false
+#         type: string
+#         description: 'service account used in cloud run deployment'      
+#       minimum_instances:
+#         required: false
+#         type: string
+#         description: 'Minimum instances limit add here'
+#       env-secrets:
+#         required: false
+#         type: string
+#         description: 'extra environment varaiables secrets which fetching from Secret Manager'
+  
+
+#     secrets:
+#       GCP_CREDENTIALS:
+#         required: false
+#         description: 'GCP credentials'
+#       SLACK_WEBHOOK_URL: 
+#         required: false
+#         description: 'slack webhook url'
+#       DB_PASS:
+#         required: false
+#         description: 'GCP posgress sql password'
+
+
+# jobs:
+#   # This workflow contains a job called "build_test_push" and "deploy_staging". It runs tests on push, and deploys to staging on pull request to master.
+#   build_test_push:
+#     # The type of runner that the job will run on
+#     runs-on: ubuntu-latest
+#     outputs:
+#       image_id: ${{ steps.push.outputs.image_id }}
+#     timeout-minutes: 20
+
+
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+
+#       # - name: Slack Notification - Start
+#       #   if: always()
+#       #   uses: rtCamp/action-slack-notify@v2
+#       #   env:
+#       #    SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}  
+#       #    SLACK_CHANNEL: cicd-alerts         
+#       #    SLACK_ICON: https://avatars.githubusercontent.com/u/66697758?s=200&v=4
+#       #    SLACK_FOOTER: ""       
+#       #    SLACK_COLOR: ${{ job.status }}      
+#       #    SLACK_TITLE: Deployment started           
+#       #    SLACK_MESSAGE: "*App:* ${{ inputs.service-name }}\n*Triggered by:* ${{ github.actor }}"
+
+#       - uses: actions/checkout@v2
+
+#       - name: Extract branch name
+
+#         shell: bash
+#         run: |
+#           echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')" >> $GITHUB_ENV
+#           chmod u+r+x ./.github/scripts/*
+
+#       - name: Set environment variables
+#         run: |
+#           (
+#           cat <<'_EOT'
+#           ${{ inputs.env-vars }}
+#           _EOT
+#           ) >> "$GITHUB_ENV"
+
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v1
+
+#       # - name: Cache Docker layers
+#       #   uses: actions/cache@v2
+#       #   with:
+#       #     path: /tmp/.buildx-cache
+#       #     key: ${{ runner.os }}-buildx-${{ github.sha }}
+#       #     restore-keys: |
+#       #       ${{ runner.os }}-buildx-
+
+#       - name: "GCP Configuration"
+#         id: "auth"
+#         uses: "google-github-actions/auth@v1"
+#         with:
+#           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+#           project_id: "${{ inputs.project_id }}"
+        
+
+#       - name: Docker Build
+#         uses: docker/build-push-action@v2
+#         with:
+#           push: false
+#           load: true
+#           context: .
+#           builder: ${{ steps.buildx.outputs.name }}
+#           file: ./Dockerfile
+#           tags: ${{ inputs.SERVICE }}:latest,${{ github.event.repository.name }}/${{ inputs.SERVICE }}:latest
+#           cache-from: type=local,src=/tmp/.buildx-cache
+#           cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+#       # - name: Move cache
+#       #   run: |
+#       #     rm -rf /tmp/.buildx-cache
+#       #     mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+#       - name: Save service account key as a file
+#         run: echo '${{ secrets.GCP_CREDENTIALS }}' > gcp_key.json # Single qoute (not double) works after echo
+
+#       - name: "Docker images"
+#         run: |
+#           docker images -a
+
+#       - name: "Docker auth"
+#         run: |
+#           gcloud auth configure-docker us-west1-docker.pkg.dev
+
+#       - id: push
+#         name: Push image to artifact registry
+#         run: |
+#           export GITHUB_JOB=${{ github.run_number }}
+#           ./.github/scripts/cd.sh push
+
+#       - id: 'deploy'
+#         uses: 'google-github-actions/deploy-cloudrun@v2.4.0'
+#         with:
+#           service: ${{ inputs.service-name }}
+#           project_id: ${{ inputs.project_id }}
+#           image: us-west1-docker.pkg.dev/icardio-dev-project/dev-artifact-registry/${{ inputs.docker_img_name }}:${{ github.run_number }}
+#           region: "${{ inputs.region }}"
+#           flags: --cpu=${{ inputs.cpu }} --memory=${{ inputs.memory }} --port=8000 --min-instances=${{ inputs.minimum_instances }} --service-account=${{ inputs.service_account }} --allow-unauthenticated
+#           env_vars: ${{ inputs.cr-vars }}
+#           secrets: ${{ inputs.env-secrets }}
+
+
+#       # - name: Slack Notification - finished
+#       #   if: always()
+#       #   uses: rtCamp/action-slack-notify@v2
+#       #   env:
+#       #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}  
+#       #     SLACK_CHANNEL: cicd-alerts         
+#       #     SLACK_ICON: https://avatars.githubusercontent.com/u/66697758?s=200&v=4
+#       #     SLACK_FOOTER: ""       
+#       #     SLACK_COLOR: ${{ job.status }}      
+#       #     SLACK_TITLE: Deployment finished           
+#       #     SLACK_MESSAGE: "*App:* ${{ inputs.service-name }}\n*Triggered by:* ${{ github.actor }}"

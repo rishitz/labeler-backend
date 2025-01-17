@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    command: /app/init.sh
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=postgres_db
+    depends_on:
+      - postgres_db
+    image: labeler-backend_web:latest
+    container_name: labeler-backend
+    networks:
+      - my_network
+
+  postgres_db:
+    image: postgres:15.9-alpine
+    environment:
+      - POSTGRES_DB=labeler
+      - POSTGRES_USER=labeler
+      - POSTGRES_PASSWORD=labeler
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
+    container_name: labeler-postgres
+
+networks:
+  my_network:
+    driver: bridge
+    
+volumes:
+  postgres_data:

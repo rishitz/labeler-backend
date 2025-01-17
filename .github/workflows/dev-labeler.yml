@@ -1,0 +1,35 @@
+# name: Dev Labeler Backend
+# permissions: write-all
+# on:
+#   push:
+#     branches:
+#       - feat/cloudrun-deployment-dev
+#   workflow_dispatch:
+# jobs:
+#   Dev-Labeler:
+#     uses: iCardioAI/labeler-backend/.github/workflows/shared-cloudrun.yml@feat/gcp_setup_dev
+#     with:
+#       service: app
+#       service-name: labeler-backend-dev
+#       docker_img_name: labeler-backend-dev
+#       region: us-west1
+#       project_id: icardio-dev-project
+#       minimum_instances: 1
+#       cpu: 1
+#       memory: 1Gi
+#       service_account: dev-account@icardio-dev-project.iam.gserviceaccount.com
+#       env-vars: |
+#         REGISTRY=us-west1-docker.pkg.dev/icardio-dev-project/dev-artifact-registry/labeler-backend-dev
+#         SERVICE=app
+#       cr-vars: |
+#         DB_PORT= 5432
+#         DB_USER= postgres
+#         DB_NAME= postgres
+#         DB_HOST= 10.70.218.3
+#       env-secrets: |-
+#         DB_PASS=projects/624820480384/secrets/DB_PASS_LABELER_BACKEND_DEV/versions/1
+
+#     secrets:
+#       GCP_CREDENTIALS: ${{ secrets.GCP_CREDS_GHA }}
+#       DB_PASS: ${{ secrets.LABELER_DB_PASS }} 
+#       # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
