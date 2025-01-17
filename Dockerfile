@@ -35,7 +35,7 @@ RUN pip install djangorestframework==3.15.2 \
     python-dateutil==2.9.0.post0 \
     drf-yasg==1.21.8 \
     whitenoise \
-   sentry-sdk[django]
+    sentry-sdk[django]
 
 RUN pip install daphne
 
@@ -56,5 +56,5 @@ USER ${APP_USER}
 ENV PYTHONPATH "${PYTHONPATH}:${PROJECT_ROOT}"
 
 # Set the entrypoint and default command
-ENTRYPOINT ["./init.sh"]
+ENTRYPOINT ["/bin/bash","/app/init.sh"]
 CMD ["app"]
