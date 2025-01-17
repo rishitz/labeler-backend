@@ -56,5 +56,5 @@ USER ${APP_USER}
 ENV PYTHONPATH "${PYTHONPATH}:${PROJECT_ROOT}"
 
 # Set the entrypoint and default command
-ENTRYPOINT ["/bin/bash","/app/init.sh"]
+ENTRYPOINT ["/bin/bash","/${SERVICE_NAME}/init.sh"]
 CMD ["app"]
