@@ -1,10 +1,10 @@
 repos:
   - repo: https://github.com/psf/black
-    rev: 24.10.0
+    rev: 25.1.0
     hooks:
       - id: black
-  - repo: https://github.com/timothycrosley/isort
-    rev: 5.13.2
+  - repo: https://github.com/PyCQA/isort
+    rev: 6.0.0
     hooks:
       - id: isort
         args: ["--profile", "black"]
@@ -18,7 +18,7 @@ repos:
           - "--statistics"
         exclude: "migrations/"
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.10
+    rev: 1.8.2
     hooks:
       - id: bandit
         args: [
@@ -36,7 +36,7 @@ repos:
       - id: check-merge-conflict
       - id: check-json
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-    rev: v9.18.0
+    rev: v9.20.0
     hooks:
       - id: commitlint
         stages: [commit-msg]
