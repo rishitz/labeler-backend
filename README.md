@@ -127,4 +127,3 @@ When writing tests, follow this naming convention for test methods:
 ```
 def test_<methodUnderTest>_<expectedResult>_when<underCertainConditions>
 ```
-

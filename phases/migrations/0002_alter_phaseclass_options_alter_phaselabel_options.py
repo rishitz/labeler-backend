@@ -6,16 +6,22 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('phases', '0001_initial'),
+        ("phases", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='phaseclass',
-            options={'verbose_name': 'Phase Class', 'verbose_name_plural': 'Phase Classes'},
+            name="phaseclass",
+            options={
+                "verbose_name": "Phase Class",
+                "verbose_name_plural": "Phase Classes",
+            },
         ),
         migrations.AlterModelOptions(
-            name='phaselabel',
-            options={'verbose_name': 'Phase Label', 'verbose_name_plural': 'Phase Labels'},
+            name="phaselabel",
+            options={
+                "verbose_name": "Phase Label",
+                "verbose_name_plural": "Phase Labels",
+            },
         ),
     ]

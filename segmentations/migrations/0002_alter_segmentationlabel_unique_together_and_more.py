@@ -7,39 +7,42 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clinic', '0002_alter_media_options'),
-        ('phases', '0002_alter_phaseclass_options_alter_phaselabel_options'),
-        ('segmentations', '0001_initial'),
+        ("clinic", "0002_alter_media_options"),
+        ("phases", "0002_alter_phaseclass_options_alter_phaselabel_options"),
+        ("segmentations", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='segmentationlabel',
+            name="segmentationlabel",
             unique_together=set(),
         ),
         migrations.AddConstraint(
-            model_name='segmentationlabel',
-            constraint=models.UniqueConstraint(fields=('user', 'frame', 'segmentation_class'), name='unique_user_frame_segmentation_class'),
+            model_name="segmentationlabel",
+            constraint=models.UniqueConstraint(
+                fields=("user", "frame", "segmentation_class"),
+                name="unique_user_frame_segmentation_class",
+            ),
         ),
         migrations.RemoveField(
-            model_name='segmentationlabel',
-            name='accepted',
+            model_name="segmentationlabel",
+            name="accepted",
         ),
         migrations.RemoveField(
-            model_name='segmentationlabel',
-            name='deny_reason',
+            model_name="segmentationlabel",
+            name="deny_reason",
         ),
         migrations.RemoveField(
-            model_name='segmentationlabel',
-            name='extension',
+            model_name="segmentationlabel",
+            name="extension",
         ),
         migrations.RemoveField(
-            model_name='segmentationlabel',
-            name='quality_label',
+            model_name="segmentationlabel",
+            name="quality_label",
         ),
         migrations.RemoveField(
-            model_name='segmentationlabel',
-            name='review_user',
+            model_name="segmentationlabel",
+            name="review_user",
         ),
     ]
