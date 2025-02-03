@@ -44,7 +44,7 @@
 #       service_account:
 #         required: false
 #         type: string
-#         description: 'service account used in cloud run deployment'      
+#         description: 'service account used in cloud run deployment'
 #       minimum_instances:
 #         required: false
 #         type: string
@@ -53,13 +53,13 @@
 #         required: false
 #         type: string
 #         description: 'extra environment varaiables secrets which fetching from Secret Manager'
-  
+
 
 #     secrets:
 #       GCP_CREDENTIALS:
 #         required: false
 #         description: 'GCP credentials'
-#       SLACK_WEBHOOK_URL: 
+#       SLACK_WEBHOOK_URL:
 #         required: false
 #         description: 'slack webhook url'
 #       DB_PASS:
@@ -85,12 +85,12 @@
 #       #   if: always()
 #       #   uses: rtCamp/action-slack-notify@v2
 #       #   env:
-#       #    SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}  
-#       #    SLACK_CHANNEL: cicd-alerts         
+#       #    SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+#       #    SLACK_CHANNEL: cicd-alerts
 #       #    SLACK_ICON: https://avatars.githubusercontent.com/u/66697758?s=200&v=4
-#       #    SLACK_FOOTER: ""       
-#       #    SLACK_COLOR: ${{ job.status }}      
-#       #    SLACK_TITLE: Deployment started           
+#       #    SLACK_FOOTER: ""
+#       #    SLACK_COLOR: ${{ job.status }}
+#       #    SLACK_TITLE: Deployment started
 #       #    SLACK_MESSAGE: "*App:* ${{ inputs.service-name }}\n*Triggered by:* ${{ github.actor }}"
 
 #       - uses: actions/checkout@v2
@@ -127,7 +127,7 @@
 #         with:
 #           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 #           project_id: "${{ inputs.project_id }}"
-        
+
 
 #       - name: Docker Build
 #         uses: docker/build-push-action@v2
@@ -179,10 +179,10 @@
 #       #   if: always()
 #       #   uses: rtCamp/action-slack-notify@v2
 #       #   env:
-#       #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}  
-#       #     SLACK_CHANNEL: cicd-alerts         
+#       #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+#       #     SLACK_CHANNEL: cicd-alerts
 #       #     SLACK_ICON: https://avatars.githubusercontent.com/u/66697758?s=200&v=4
-#       #     SLACK_FOOTER: ""       
-#       #     SLACK_COLOR: ${{ job.status }}      
-#       #     SLACK_TITLE: Deployment finished           
+#       #     SLACK_FOOTER: ""
+#       #     SLACK_COLOR: ${{ job.status }}
+#       #     SLACK_TITLE: Deployment finished
 #       #     SLACK_MESSAGE: "*App:* ${{ inputs.service-name }}\n*Triggered by:* ${{ github.actor }}"

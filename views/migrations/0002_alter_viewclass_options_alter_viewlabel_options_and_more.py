@@ -7,42 +7,53 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clinic', '0002_alter_media_options'),
-        ('views', '0001_initial'),
+        ("clinic", "0002_alter_media_options"),
+        ("views", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='viewclass',
-            options={'verbose_name': 'View Class', 'verbose_name_plural': 'View Classes'},
+            name="viewclass",
+            options={
+                "verbose_name": "View Class",
+                "verbose_name_plural": "View Classes",
+            },
         ),
         migrations.AlterModelOptions(
-            name='viewlabel',
-            options={'verbose_name': 'View Label', 'verbose_name_plural': 'View Labels'},
+            name="viewlabel",
+            options={
+                "verbose_name": "View Label",
+                "verbose_name_plural": "View Labels",
+            },
         ),
         migrations.AlterUniqueTogether(
-            name='viewclass',
+            name="viewclass",
             unique_together=set(),
         ),
         migrations.AlterUniqueTogether(
-            name='viewlabel',
+            name="viewlabel",
             unique_together=set(),
         ),
         migrations.AddConstraint(
-            model_name='viewclass',
-            constraint=models.UniqueConstraint(fields=('window', 'view', 'type', 'media_type'), name='unique_view_class'),
+            model_name="viewclass",
+            constraint=models.UniqueConstraint(
+                fields=("window", "view", "type", "media_type"),
+                name="unique_view_class",
+            ),
         ),
         migrations.AddConstraint(
-            model_name='viewlabel',
-            constraint=models.UniqueConstraint(fields=('user', 'dicom'), name='unique_view_per_user_dicom'),
+            model_name="viewlabel",
+            constraint=models.UniqueConstraint(
+                fields=("user", "dicom"), name="unique_view_per_user_dicom"
+            ),
         ),
         migrations.RemoveField(
-            model_name='viewlabel',
-            name='denied',
+            model_name="viewlabel",
+            name="denied",
         ),
         migrations.RemoveField(
-            model_name='viewlabel',
-            name='review_user',
+            model_name="viewlabel",
+            name="review_user",
         ),
     ]

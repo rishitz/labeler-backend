@@ -31,5 +31,5 @@
 
 #     secrets:
 #       GCP_CREDENTIALS: ${{ secrets.GCP_CREDS_GHA }}
-#       DB_PASS: ${{ secrets.LABELER_DB_PASS }} 
+#       DB_PASS: ${{ secrets.LABELER_DB_PASS }}
 #       # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

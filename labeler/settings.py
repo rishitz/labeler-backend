@@ -1,10 +1,10 @@
 import logging
+import os
 import sys
 from datetime import timedelta
 from pathlib import Path
 
 import environ
-import os
 import sentry_sdk
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +30,7 @@ SECRET_KEY = env(
 DEBUG = env("DEBUG", default=False)
 
 # ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
-ALLOWED_HOSTS = [ '*' ]
+ALLOWED_HOSTS = ["*"]
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
@@ -73,7 +73,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 ROOT_URLCONF = "labeler.urls"
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 TEMPLATES = [
     {

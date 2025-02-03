@@ -7,18 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clinic', '0002_alter_media_options'),
-        ('quality', '0001_initial'),
+        ("clinic", "0002_alter_media_options"),
+        ("quality", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='qualitylabel',
+            name="qualitylabel",
             unique_together=set(),
         ),
         migrations.AddConstraint(
-            model_name='qualitylabel',
-            constraint=models.UniqueConstraint(fields=('user', 'dicom'), name='unique_quality_per_user_dicom'),
+            model_name="qualitylabel",
+            constraint=models.UniqueConstraint(
+                fields=("user", "dicom"), name="unique_quality_per_user_dicom"
+            ),
         ),
     ]
